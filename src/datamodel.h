@@ -75,6 +75,8 @@ typedef struct _Sequence {
   char    *name;
   char    *id;
   char    *sequence;
+  char    *qual;
+  char    *comment;
   int     length;
   int     start;
   int     end;

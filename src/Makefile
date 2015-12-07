@@ -14,10 +14,10 @@ LDFLAGS= -lm
 #INCDIR=/home/radon00/mclamp/cvs/ensc-core/src/
 #ENSFLAGS =  -g -Wall -I$(INCDIR)DataModel -I$(INCDIR)DataAdaptors -I$(INCDIR)Util -I$(INCDIR)DataModel/Mapper -I$(INCDIR)DataModel/Basic -I$(INCDIR)Compara/DataAdaptors -I$(INCDIR)Compara/DataModel $(MYSQLCFLAGS)
 
-all: random_corr test_fasta test_pwm test_pimer test_random_pos test_all gff_random_coverage test_pi gff_pi_coverage test_corr exon_pi_coverage test_fft gff_pimer_coverage gff_pimer_mercov gff_pimer_mercov_HMRD fasta2reads poghash scan_transfac parse_transout read_region gff_aligncov tfscan
+all: random_corr test_fasta test_fastq test_pwm test_pimer test_random_pos test_all gff_random_coverage test_pi gff_pi_coverage test_corr exon_pi_coverage test_fft gff_pimer_coverage gff_pimer_mercov gff_pimer_mercov_HMRD fasta2reads poghash scan_transfac parse_transout read_region gff_aligncov tfscan
 
 clean:
-	\rm -f *.o random_corr test_fasta test_pimer test_random_pos test_all gff_random_coverage test_pi gff_pi_coverage test_corr exon_pi_coverage test_fft gff_pimer_coverage gff_pimer_mercov gff_pimer_mercov_HMRD fasta2reads poghash scan_transfac parse_transout scan_transfac_gff read_region gff_aligncov tfscan test_pwm
+	\rm -f *.o random_corr test_fasta test_fastq test_pimer test_random_pos test_all gff_random_coverage test_pi gff_pi_coverage test_corr exon_pi_coverage test_fft gff_pimer_coverage gff_pimer_mercov gff_pimer_mercov_HMRD fasta2reads poghash scan_transfac parse_transout scan_transfac_gff read_region gff_aligncov tfscan test_pwm
 
 ##################################################
 
@@ -47,6 +47,9 @@ test_corr: test_corr.c fasta.o gff.o pimer.o chromosome.o pog_utils.o
 
 test_fasta: test_fasta.c fasta.o gff.o pimer.o chromosome.o pog_utils.o
 	$(CC) $(CFLAGS) -o test_fasta test_fasta.c fasta.o gff.o pimer.o chromosome.o pog_utils.o ${LDFLAGS}
+
+test_fastq: test_fastq.c fastq.o 
+	$(CC) $(CFLAGS) -o test_fastq test_fastq.c fastq.o ${LDFLAGS}
 
 test_pwm: test_pwm.c fasta.o gff.o pimer.o chromosome.o pog_utils.o
 	$(CC) $(CFLAGS) -o test_pwm test_pwm.c fasta.o gff.o pimer.o chromosome.o pog_utils.o ${LDFLAGS}
