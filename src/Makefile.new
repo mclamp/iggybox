@@ -1,0 +1,79 @@
+CC          =   gcc
+CFLAGS      =   -c -Wall
+LDFLAGS     =   -lm
+  
+MAIN        =   tree
+
+
+# Compile all c files
+
+#SRC         = %.c
+OBJ         = $(SRC:.c=.o)
+
+all: $(SRC) $(MAIN)
+	$(CC) $(LDFLAGS) $(OBJ) -o $@
+
+	
+#$(EXECUTABLE): $(OBJECTS) 
+#	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+# $@ is target
+# $? lists the dependents more recent than the target
+# $^ lists *all* dependencies and removes duplicated
+# $+ like $^ but keeps duplicates
+# $< is the first dependency
+
+#.c.o:
+#	$(CC) $(CFLAGS) $< -o $@
+
+
+# Wildcard matching  (This isn't actually very useful - rarely do we have one executable per c file)
+
+#%.c:
+#	$(CC) -o $* $*.c
+
+# Implicit targets   -  we can reasonably assume a .c file has an associated .h file.
+
+
+%.o: %.c 
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+#%.o:
+#	$(CC) -c $@.c $@.h
+
+
+
+# This makefile compiles the project listed in the PROJ macro
+#
+
+#PROJ = project			# the name of the project
+#OBJS = main.obj io.obj		# list of object files 
+
+# Configuration:
+#
+
+#MODEL = s			# memory model
+#CC    = bcc			# name of compiler 
+
+# Compiler-dependent section
+#
+
+#%if $(CC) == bcc		# if compiler is bcc
+#  CFLAGS = –m$(MODEL)		# $(CFLAGS) is –ms
+#  LDSTART = c0$(MODEL)		# the start-up object file
+#  LDLIBS = c$(MODEL)		# the library
+#  LDFLAGS = /Lf:\bc\lib		# f:\bc\lib is library directory
+#%elif $(CC) == cl		# else if compiler is cl
+#  CFLAGS = –A$(MODEL,UC)	# $(CFLAGS) is –AS
+#  LDSTART =			# no special start-up
+#  LDLIBS =			# no special library
+#  LDFLAGS = /Lf:\c6\lib;	# f:\c6\lib is library directory
+#%else				# else
+#% abort Unsupported CC==$(CC)	# compiler is not supported
+#%endif				# endif 
+# The project to be built
+#
+
+#$(PROJ).exe : $(OBJS)
+#	tlink $(LDSTART) $(OBJS), $(.TARGET),, $(LDLIBS) $(LDFLAGS) 
+#$(OBJS) : incl.h 

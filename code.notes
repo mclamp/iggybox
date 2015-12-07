@@ -1,0 +1,235 @@
+
+
+The scrolled window is not ideal as it still allocates a big chunk of memory 
+if a big area is allocated.
+
+Need to keep the pixmap the size of the window
+
+Need to adjust the scrollbars accordingly.
+
+Need a viewport to keep track of which part of the alignment we're
+viewing
+
+
+Scrolled window
+Drawing area the size of the window (callback to resize this when window resized)
+
+Set the values of the scrollbars.
+
+
+
+Looks ok - scrollbars in but not doing anything yet.
+
+Maybe a table layout will work.
+
+Need to look at menus
+
+Need a scale bar 
+Consensus panel.
+
+Callback events from the scrollbars will do the following.
+
+ - calculate the piece that needs to be drawn
+ - copies the piece that is reused
+ - draws the new piece
+ - stores the currently viewed area (in a viewport)
+
+ - updates the scale
+ - updates the id panel
+
+Need a viewport to store the values.
+
+Sequence reading and storage.
+
+Alignment manipulation
+
+Tree storage
+
+
+Could we have a widget for sequence display? 
+
+Sequence Features are the data structures to store the sequences
+
+The alignments are stored as DnaAlignFeatures - query sequence is the alignment
+and the hit sequence is the actual sequence.
+
+
+Data to be stored :
+
+ Font
+ Char height and width
+ Colour scheme
+ 
+ showScale
+ showConsensus
+
+ showIds
+ showBoxes
+ showText
+ showDescription
+ showFeatures
+
+ colourBoxes
+ colourText
+ 
+
+ColorPool
+ - hashes colours by their rgb numbers
+
+ColorScheme
+ - name
+ - get_color_by_position(FeatureSet align AlignFeature af, char position)
+
+FormatPool
+
+Output alignments
+Printing?
+
+Creating trees
+Drawing trees
+
+Parsing trees
+
+Displaying summary info for alignment
+Displaying other info - description
+
+FeatureSet align should contain other feature sets so we can group
+
+Editing
+
+ - selected residue
+ - inserting/deleting
+ - callbacks for redraw
+
+Getting sequences from files/srs/pfetch
+
+Reading Swissprot/EMBL files and getting the features.
+
+Config
+
+ - default colour scheme
+ - default settings (font size etc)
+ - file history
+
+
+------------------------------------------------------------------------
+ - define the Alignment structure
+ - FeatureSet containing FeatureSets
+ - defined some accessor functions
+
+     new
+     add_AlignFeature(align,af,group)
+     size (width,height)
+     get_AlignFeatureAt(align,i)
+
+Displayed_Alignment
+
+     selected_sequences
+     displayed_sequences
+     selected_columns
+
+     consensus?
+
+I/O
+
+Hack the fasta reader for now
+
+Colour Schemes
+
+Base colour scheme
+
+  - name
+  - get colour by
+
+CharacterColourScheme - get/set character hash
+
+Character Drawing 
+ draw_character(widget,char,color?)
+
+ expose callback looks at the Viewport and draws the relevant parts of the
+ relevant sequences
+
+Viewport
+
+ startx
+ endx
+ starty
+ endy
+
+ residueToPixel
+ pixelToResidue
+
+Available ColourSchemes
+
+   ColourSchemePool - reads from config
+
+     - get_SchemeByName
+
+   
+   ColourSchemeData - in file
+     
+     BaseColourSchemeFile 
+         - reads residues and rgb
+               FWY 200 100 50
+
+
+Translating sequence
+Displaying protein and dna seuqences
+
+Displaying reference/consensus from grouped seuqences
+
+
+Friday November 28th 2003
+-------------------------
+
+Scrollbars working
+ColourScheme (Taylor) working by residue
+Id Panel is drawn
+Responds to mouse clicks
+Scale bar present but scale not correct
+Open and save dialogs present and working for fasta format
+
+Start of msf file parsing
+
+Things on the list
+
+printing
+wrapped display
+Don't wrap the alignemnt - make sure the scrollbars have the right values
+
+sorting
+
+selecting sequences
+
+grouping - 
+
+Extra columns to show other sequence attributes (start/end/organism)
+
+Other colour schemes
+
+Calculating percentage identity
+Calculating consensus
+
+Showing features
+
+Collapsing/expanding the alignment for different reference sequences
+
+Decomposing the alignment sequences into matches to the reference
+
+Editing features - insert delete push
+
+deleting sequences
+adding sequences
+
+aligning sequences
+
+clustalw
+
+having 
+
+wrap view
+
+Sunday November 30th 2003
+
+1) PID
+2) Wrapping alignment

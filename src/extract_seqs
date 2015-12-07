@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+
+my %seq;
+
+my $id;
+my $desc;
+my $seq;
+my $count = 0;
+
+open(IN,"<$ARGV[0]");
+my $charcount = 0;
+
+while (<IN>) {
+  if (/^>(\S+) *(.*)\n/) {
+     if (defined($id))  {
+        $seq{$count}{seq} = $seq;
+        $seq{$count}{id} = $id;
+        $seq{$count}{desc} = $desc;
+        $seq{$count}{charcount} = $charcount;
+        $seq = "";
+     }
+
+     $id = $1;
+     $desc = $2;
+     $count++;
+     $charcount= 0;
+  } else {
+    my $tmp = $_;
+    $tmp =~ s/\-//g;
+    my $len2 = length($tmp);
+    $charcount+= $len2;
+    $seq .= $_;
+  }
+}
+$seq{$count}{seq} = $seq;
+$seq{$count}{id}  = $id;
+$seq{$count}{desc} = $desc;
+$seq{$count}{charcount} = $charcount;
+
+foreach my $num (sort {$a <=> $b} keys %seq) {       
+   #if ($seq{$num}{charcount} > 1) {
+     print $num . " " . $seq{$num}{id} . " " . ($seq{$num}{charcount}) . "\n";
+  # }
+}
+
+my $line = <STDIN>;
+
+chomp($line);
+
+my @f = split(/,/,$line);
+
+open(OUT,">$ARGV[0].new.fa");
+
+foreach my $f (@f) {
+   print OUT ">" . $seq{$f}{id} . " " . $seq{$f}{desc} . "\n";
+   print OUT $seq{$f}{seq};
+}
+
+

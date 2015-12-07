@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+
+use strict;
+
+use Bio::EnsEMBL::DBSQL::DBAdaptor;
+
+use Getopt::Long;
+
+my $host     = 'localhost';
+my $dbname   = 'homo_sapiens_core_18_34';
+my $dbuser   = 'root';
+my $chrname;
+my $chrstart;
+my $chrend;
+my $infile;
+my $readlen = 650;
+my $mask = 0;
+$| = 1;
+
+my $pass = '';
+&GetOptions( 'host:s'    => \$host,
+             'dbuser:s'  => \$dbuser,
+             'dbname:s'  => \$dbname,
+             'chr:s'     => \$chrname,
+             'chrstart:s'=> \$chrstart,
+             'chrend:s'  => \$chrend,
+             'readlen:s' => \$readlen,
+             'infile:s'  => \$infile,
+             'mask'      => \$mask,
+             );
+
+my $db = new Bio::EnsEMBL::DBSQL::DBAdaptor(-host             => $host,
+					    -user             => $dbuser,
+                                            -pass             => $pass,
+					    -dbname           => $dbname,
+					    );
+
+my $chr = $db->get_ChromosomeAdaptor->fetch_by_chr_name($chrname);
+
+my $slice1 = $db->get_SliceAdaptor->fetch_by_chr_start_end($chrname,$chrstart,$chrend);
+my $seq1;
+if (!$mask) {
+  $seq1 = $slice1->seq;
+} else {
+  $seq1 = $slice1->get_repeatmasked_seq->seq;
+}
+$seq1 =~ s/(.{72})/$1\n/g;
+
+print ">$chrname.$chrstart-$chrend\n";
+print $seq1 . "\n";
+
+

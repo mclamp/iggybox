@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+
+use strict;
+
+use Bio::EnsEMBL::DBSQL::DBAdaptor;
+
+use Getopt::Long;
+
+my $host     = '18.103.3.97';
+my $dbname   = 'homo_sapiens_core_18_34';
+my $dbuser   = 'root';
+my $chrname;
+my $chrstart;
+my $chrend;
+my $infile;
+my $readlen = 650;
+
+$| = 1;
+
+my $pass = '';
+&GetOptions( 'host:s'    => \$host,
+             'dbuser:s'  => \$dbuser,
+             'dbname:s'  => \$dbname,
+             'chr:s'     => \$chrname,
+             'chrstart:s'=> \$chrstart,
+             'chrend:s'  => \$chrend,
+             'readlen:s' => \$readlen,
+             'infile:s'  => \$infile,
+             );
+
+my $db = new Bio::EnsEMBL::DBSQL::DBAdaptor(-host             => $host,
+					    -user             => $dbuser,
+                                            -pass             => $pass,
+					    -dbname           => $dbname,
+					    );
+
+my $chr = $db->get_ChromosomeAdaptor->fetch_by_chr_name($chrname);
+
+my $found = 0;
+
+while ($found == 0) {
+my $start = int(rand(($chrend-$readlen-$chrstart))) + $chrstart;
+my $end   = $start + $readlen -1;
+
+my $slice = $db->get_SliceAdaptor->fetch_by_chr_start_end($chrname,$start,$end);
+
+my $seq = $slice->get_repeatmasked_seq;
+
+my $len1 = $seq->length;
+
+my $tmpseq = $seq->seq;
+$tmpseq =~ s/N//g;
+my $len2 = length($tmpseq);
+print STDERR "Percent repeat = " . (100 - int($len2*100/$len1)) . "\n";
+if ($len2*100/$len1 > 70) {
+   $found = 1;
+   print ">pog1 $chrname.$start-$end\n";
+   print $seq->seq . "\n";
+  }
+}

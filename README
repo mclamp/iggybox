@@ -1,0 +1,12 @@
+Michele ClampNovember 28th 2003
+
+You will need to install gtk and atk and maybe other things to get pogview to work.
+
+To compile 
+
+cd src
+make
+./pogview ../data/1hdc.fasta
+
+
+This has been tested on MacOSX.10.2.8
